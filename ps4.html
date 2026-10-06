@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PS4 — Jogos PKG Download</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #0f0f14; color: #e6e6e6; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #2a2a3c; }
+        h1 { color: #00d4ff; font-size: 1.8rem; margin-bottom: 8px; }
+        .sub { color: #888; font-size: 0.9rem; margin-bottom: 10px; }
+        .search-bar { width: 100%; padding: 12px 18px; font-size: 1rem; border: none; border-radius: 10px; background: #1e1e2f; color: #fff; margin-bottom: 15px; outline: none; }
+        .search-bar:focus { box-shadow: 0 0 0 2px #00d4ff; }
+        .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        select { padding: 10px 15px; border-radius: 8px; background: #1e1e2f; color: #fff; border: none; }
+        .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+        .game-card { background: #1a1a2b; border-radius: 12px; overflow: hidden; border: 1px solid #2a2a3c; transition: all .2s; }
+        .game-card:hover { transform: translateY(-3px); border-color: #00d4ff; box-shadow: 0 5px 20px rgba(0,212,255,.1); }
+        .cover { width: 100%; height: 57%; object-fit: cover; background: #222; }
+        .card-body { padding: 14px; }
+        .game-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; min-height: 40px; }
+        .tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 0.7rem; margin: 0 4px 4px 0; }
+        .tag.USA { background: #1a4971; color: #a3d9ff; }
+        .tag.EUR { background: #1a713f; color: #a3ffc8; }
+        .tag.JAP { background: #711a4f; color: #ffa3d1; }
+        .meta { font-size: 0.78rem; color: #999; margin: 8px 0 12px; line-height: 1.5; }
+        .download-btn { display: block; text-align: center; padding: 9px; background: linear-gradient(90deg, #0066ff, #00d4ff); color: #fff; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+        .loading, .no-results { text-align: center; padding: 40px; color: #888; }
+        .info-box { background: #1e1e2f; padding: 15px; border-radius: 10px; margin-bottom: 20px; font-size: 0.88rem; line-height: 1.7; }
+        .hidden { display: none !important; }
+        footer { margin-top: 30px; text-align: center; font-size: 0.75rem; color: #555; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🎮 PS4 — Jogos PKG</h1>
+    <p class="sub" id="status">Carregando lista...</p>
+</header>
+
+<div class="info-box">
+    <strong>📋 Como usar:</strong>
+    <ul style="margin: 6px 0 0 20px;">
+        <li>🔍 Busque por nome ou Title ID</li>
+        <li>⬇ Clique em "Baixar PKG" para link direto</li>
+        <li>📱 No PKGi use: <code style="color:#00d4ff">https://raw.githubusercontent.com/gop753811-netizen/fpkgi/main/GAMES-archive.org.json</code></li>
+    </ul>
+</div>
+
+<input type="text" class="search-bar" id="search" placeholder="🔍 Buscar jogo...">
+<div class="filters">
+    <select id="filter-region">
+        <option value="all">Todas as Regiões</option>
+        <option value="USA">🇺🇸 USA</option>
+        <option value="EUR">🇪🇺 Europa</option>
+        <option value="JAP">🇯🇵 Japão</option>
+    </select>
+    <select id="sort-by">
+        <option value="name" selected>Ordenar por Nome</option>
+        <option value="size-asc">Menor → Maior</option>
+        <option value="size-desc">Maior → Menor</option>
+    </select>
+</div>
+
+<div class="loading" id="loading">Carregando dados do servidor...</div>
+<div class="no-results hidden" id="noResults">Nenhum jogo encontrado.</div>
+<div class="game-grid hidden" id="gameContainer"></div>
+
+<footer>
+    Dados: Divirta-se
+</footer>
+
+<script>
+const JSON_URL = "https://raw.githubusercontent.com/gop753811-netizen/fpkgi/main/GAMES-archive.org.json";
+let allGames = [];
+
+function formatSize(bytes) {
+    const gb = (bytes / 1073741824).toFixed(1);
+    return `${gb} GB`;
+}
+
+function normalizeRegion(r) {
+    if (!r) return "USA";
+    const u = r.toUpperCase();
+    if (u.startsWith("US")) return "USA";
+    if (u.startsWith("EU") || u === "EUR") return "EUR";
+    if (u.startsWith("JP") || u === "JAP") return "JAP";
+    return r;
+}
+
+function transformData(raw) {
+    const games = [];
+    for (const [url, data] of Object.entries(raw.DATA || {})) {
+        games.push({
+            url,
+            title_id: data.title_id || "",
+            name: data.name || "Sem nome",
+            region: normalizeRegion(data.region),
+            version: data.version || "1.00",
+            size: data.size || 0,
+            min_fw: data.min_fw || 0,
+            cover_url: data.cover_url || ""
+        });
+    }
+    return games.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function render(list) {
+    const container = document.getElementById("gameContainer");
+    const noResults = document.getElementById("noResults");
+    container.innerHTML = "";
+
+    if (!list.length) {
+        container.classList.add("hidden");
+        noResults.classList.remove("hidden");
+        return;
+    }
+
+    noResults.classList.add("hidden");
+    container.classList.remove("hidden");
+
+    list.forEach(g => {
+        const card = document.createElement("div");
+        card.className = "game-card";
+        card.innerHTML = `
+            <img class="cover" src="${g.cover_url}" alt="${g.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/260x150/1a1a2b/ffffff?text=${encodeURIComponent(g.name.substring(0,20))}'">
+            <div class="card-body">
+                <h3 class="game-name">${g.name}</h3>
+                <span class="tag ${g.region}">${g.region}</span>
+                <span class="tag">v${g.version}</span>
+                <div class="meta">
+                    <div><strong>ID:</strong> ${g.title_id}</div>
+                    <div><strong>Tamanho:</strong> ${formatSize(g.size)}</div>
+                    <div><strong>FW:</strong> ${g.min_fw}</div>
+                </div>
+                <a class="download-btn" href="${g.url}" target="_blank" rel="noopener">⬇ Baixar PKG</a>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function applyFilters() {
+    const search = document.getElementById("search").value.toLowerCase().trim();
+    const region = document.getElementById("filter-region").value;
+    const sortBy = document.getElementById("sort-by").value;
+
+    let filtered = allGames.filter(g => {
+        const matchSearch = !search || g.name.toLowerCase().includes(search) || g.title_id.toLowerCase().includes(search);
+        const matchRegion = region === "all" || g.region === region;
+        return matchSearch && matchRegion;
+    });
+
+    if (sortBy === "name") filtered.sort((a, b) => a.name.localeCompare(b.name));
+    else if (sortBy === "size-asc") filtered.sort((a, b) => a.size - b.size);
+    else if (sortBy === "size-desc") filtered.sort((a, b) => b.size - a.size);
+
+    render(filtered);
+    document.getElementById("status").textContent = `${filtered.length} jogos encontrados`;
+}
+
+async function loadData() {
+    try {
+        const res = await fetch(JSON_URL);
+        const data = await res.json();
+        allGames = transformData(data);
+        
+        document.getElementById("loading").classList.add("hidden");
+        document.getElementById("status").textContent = `${allGames.length} jogos carregados`;
+        
+        applyFilters();
+    } catch (err) {
+        document.getElementById("loading").innerHTML = `❌ Erro ao carregar: ${err.message}<br>Use a URL direto no PKGi: <code>${JSON_URL}</code>`;
+    }
+}
+
+document.getElementById("search").addEventListener("input", applyFilters);
+document.getElementById("filter-region").addEventListener("change", applyFilters);
+document.getElementById("sort-by").addEventListener("change", applyFilters);
+
+loadData();
+</script>
+</body>
+</html>
