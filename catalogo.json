@@ -1,0 +1,80 @@
+{
+  "store": {
+    "name": "Minha Loja Gamer",
+    "tagline": "Produtos originais e licenciados com o melhor preço. Atendimento via WhatsApp.",
+    "whatsapp": "5511999999999",
+    "instagram": "https://instagram.com/sualoja",
+    "email": "contato@sualoja.com",
+    "currency": "R$"
+  },
+  "categories": [
+    "Consoles",
+    "Acessórios",
+    "Jogos Originais",
+    "Cartões PSN"
+  ],
+  "products": [
+    {
+      "id": "1",
+      "title": "Console PlayStation 4 Slim 1TB (original, com garantia)",
+      "category": "Consoles",
+      "price": 1899.00,
+      "oldPrice": 2199.00,
+      "image": "",
+      "description": "Console original na caixa, com 1 controle, cabos e garantia de 3 meses.",
+      "badge": "Promoção"
+    },
+    {
+      "id": "2",
+      "title": "Controle DualShock 4 original (preto)",
+      "category": "Acessórios",
+      "price": 249.90,
+      "oldPrice": 299.90,
+      "image": "",
+      "description": "Controle original Sony, lacrado.",
+      "badge": "Novo"
+    },
+    {
+      "id": "3",
+      "title": "Jogo original (mídia física) — escolha o título no WhatsApp",
+      "category": "Jogos Originais",
+      "price": 99.90,
+      "oldPrice": 149.90,
+      "image": "",
+      "description": "Jogos originais em mídia física, seminovos ou lacrados. Consulte disponibilidade.",
+      "badge": "Promoção",
+      "badgeType": "alt"
+    },
+    {
+      "id": "4",
+      "title": "Cartão PSN R$ 100 (código digital enviado no WhatsApp)",
+      "category": "Cartões PSN",
+      "price": 95.00,
+      "oldPrice": 100.00,
+      "image": "",
+      "description": "Código digital oficial brasileiro. Envio imediato após a confirmação do pagamento.",
+      "badge": "Digital"
+    },
+    {
+      "id": "5",
+      "title": "Headset Gamer para PS4 (com fio, original)",
+      "category": "Acessórios",
+      "price": 189.00,
+      "oldPrice": 229.00,
+      "image": "",
+      "description": "Headset com microfone, compatível com PS4 e PC.",
+      "badge": ""
+    },
+    {
+      "id": "6",
+      "title": "Cartão PSN Plus Essential 3 meses (código digital)",
+      "category": "Cartões PSN",
+      "price": 84.90,
+      "oldPrice": 99.90,
+      "image": "",
+      "description": "Assinatura oficial PlayStation Plus Essential 3 meses. Envio do código no WhatsApp.",
+      "badge": "Oferta",
+      "badgeType": "alt"
+    }
+  ]
+}
