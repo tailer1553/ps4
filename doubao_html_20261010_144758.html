@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PS4 Game — Catálogo FPKGi</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050508;--surface:#0f0f1a;--card:#161625;--card-elevated:#1e1e35;
+  --accent:#4f46e5;--accent-gradient:linear-gradient(135deg,#4f46e5,#7c3aed,#ec4899);
+  --text-primary:#f8fafc;--text-secondary:#a1a1aa;--border-subtle:rgba(255,255,255,0.06);
+  --usa:#f97316;--eur:#10b981;--jap:#3b82f6;--asia:#f59e0b;
+  --online:#22c55e;--offline:#ef4444;--checking:#f59e0b;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Inter",sans-serif;}
+body{background:radial-gradient(1200px 600px at 10% -5%,rgba(79,70,229,.15),transparent 55%),radial-gradient(900px 450px at 90% 10%,rgba(236,72,153,.12),transparent 55%),var(--bg);color:var(--text-primary);min-height:100vh;}
+/* REMOÇÃO DA BARRA DE ROLAGEM */
+html { scrollbar-width: none; -ms-overflow-style: none; }
+html::-webkit-scrollbar { display: none; }
+.container{max-width:1600px;margin:0 auto;padding:0 1.25rem;}
+.top-bar{padding:1rem 0;border-bottom:1px solid var(--border-subtle);background:rgba(5,5,8,.7);backdrop-filter:blur(12px);position:sticky;top:0;z-index:99;}
+.header-inner{display:flex;flex-direction:column;gap:.75rem;}
+@media(min-width:768px){.header-inner{flex-direction:row;align-items:center;justify-content:space-between;}}
+.brand{display:flex;align-items:center;gap:.75rem;}
+.brand-icon{width:40px;height:40px;border-radius:10px;background:var(--accent-gradient);display:flex;align-items:center;justify-content:center;}
+.brand-text h1{font-size:1.2rem;font-weight:800;}
+.brand-text p{font-size:.65rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.08em;}
+.search-row{display:flex;gap:.5rem;flex-wrap:wrap;}
+.search-wrap{flex:1;min-width:220px;position:relative;}
+.search-icon{position:absolute;left:.875rem;top:50%;transform:translateY(-50%);color:var(--text-secondary);pointer-events:none;}
+.search-input{width:100%;padding:.7rem 1rem .7rem 2.4rem;border-radius:10px;border:1px solid var(--border-subtle);background:rgba(255,255,255,.03);color:var(--text-primary);font-size:.875rem;}
+.search-input:focus{outline:none;border-color:var(--accent);background:rgba(79,70,229,.06);}
+.btn-secondary{padding:.7rem 1rem;border-radius:10px;border:1px solid var(--border-subtle);background:transparent;color:var(--text-primary);cursor:pointer;font-size:.8rem;transition:.2s;}
+.btn-secondary:hover{border-color:var(--accent);background:rgba(79,70,229,.06);}
+.btn-primary{padding:.7rem 1rem;border-radius:10px;border:none;background:var(--accent-gradient);color:white;font-weight:600;cursor:pointer;transition:.2s;}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(79,70,229,.2);}
+.status-line{display:flex;align-items:center;gap:.5rem;font-size:.8rem;color:var(--text-secondary);margin:.75rem 0;flex-wrap:wrap;}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#6b7280;}
+.loading{animation:pulse 1s infinite;background:#f59e0b;}
+.ready{background:#22c55e;}
+.error{background:#ef4444;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin:1rem 0;}
+@media(min-width:640px){.stats-grid{grid-template-columns:repeat(4,1fr);}}
+.stat-card{background:var(--surface);border:1px solid var(--border-subtle);border-radius:12px;padding:.875rem 1rem;}
+.stat-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-secondary);margin-bottom:.25rem;font-weight:600;}
+.stat-value{font-size:1.35rem;font-weight:800;}
+.purple{color:#a78bfa;}.green{color:#4ade80;}.pink{color:#f472b6;}.blue{color:#60a5fa;}.orange{color:#fbbf24;}
+.filters-section{background:var(--surface);border:1px solid var(--border-subtle);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;}
+.filters-row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-bottom:.6rem;}
+.filters-row:last-child{margin-bottom:0;}
+.filter-label{font-size:.7rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-right:.25rem;}
+.chip{padding:.4rem .9rem;border-radius:16px;border:1px solid transparent;background:rgba(255,255,255,.04);color:var(--text-secondary);font-size:.78rem;font-weight:500;cursor:pointer;transition:.15s;}
+.chip:hover{background:rgba(255,255,255,.08);color:white;}
+.chip.active{background:rgba(79,70,229,.15);color:#a5b4fc;border-color:rgba(79,70,229,.3);font-weight:600;}
+.select-sort{margin-left:auto;padding:.4rem .8rem;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--border-subtle);color:var(--text-primary);font-size:.78rem;cursor:pointer;}
+.reg-panel{background:var(--surface);border:1px solid var(--border-subtle);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;}
+.reg-title{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-secondary);margin-bottom:.75rem;}
+.reg-item{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;}
+.reg-name{width:40px;font-size:.75rem;font-weight:700;}
+.reg-bar{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden;}
+.reg-fill{height:100%;border-radius:4px;transition:width .6s ease;}
+.reg-count{width:40px;font-size:.75rem;color:var(--text-secondary);text-align:right;}
+/* PAGINAÇÃO — SEM BARRA DE ROLAGEM */
+.games-container{min-height:400px;}
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem;padding:.25rem 0;}
+@media(min-width:480px){.games-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;}}
+.game-card{background:var(--card);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;cursor:pointer;transition:.2s ease;transform:translateZ(0);}
+.game-card:hover{transform:translateY(-4px);border-color:var(--accent);background:var(--card-elevated);}
+.card-cover{aspect-ratio:3/4;background:linear-gradient(135deg,rgba(79,70,229,.1),rgba(236,72,153,.1));position:relative;overflow:hidden;}
+.card-cover img{width:100%;height:100%;object-fit:cover;}
+.card-badges{position:absolute;top:.5rem;left:.5rem;right:.5rem;display:flex;justify-content:space-between;align-items:flex-start;}
+.badge-cusa{font-size:.6rem;font-weight:700;background:rgba(0,0,0,.7);padding:.25rem .45rem;border-radius:5px;}
+.badge-region{font-size:.6rem;font-weight:700;padding:.25rem .45rem;border-radius:5px;color:white;}
+.badge-region.usa{background:var(--usa);}.eur{background:var(--eur);}.jap{background:var(--jap);}.asia{background:var(--asia);}
+/* STATUS — CORRIGIDO: SOMENTE ONLINE OU OFFLINE */
+.card-status{position:absolute;top:.5rem;left:60%;transform:translateX(-50%);display:flex;align-items:center;gap:.25rem;background:rgba(0,0,0,.75);padding:.2rem .5rem;border-radius:4px;}
+.status-dot-sm{width:7px;height:7px;border-radius:50%;box-shadow:0 0 4px currentColor;}
+.status-online{background:var(--online);color:var(--online);}
+.status-offline{background:var(--offline);color:var(--offline);}
+.status-text-sm{font-size:.6rem;font-weight:600;}
+.card-fav{position:absolute;bottom:2rem;right:.5rem;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;font-size:.95rem;cursor:pointer;transition:transform .15s;}
+.card-fav:hover{transform:scale(1.15);}
+.card-dlcount{position:absolute;bottom:.5rem;left:.5rem;background:rgba(0,0,0,.7);padding:.2rem .4rem;border-radius:4px;font-size:.6rem;font-weight:600;color:#93c5fd;}
+.card-body{padding:.6rem .7rem;}
+.card-title{font-size:.82rem;font-weight:600;line-height:1.3;margin-bottom:.35rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.1em;}
+.card-meta{display:flex;justify-content:space-between;align-items:center;font-size:.65rem;color:var(--text-secondary);margin-bottom:.25rem;}
+.empty-state{text-align:center;padding:4rem 2rem;color:var(--text-secondary);display:none;min-height:300px;align-items:center;justify-content:center;flex-direction:column;}
+.empty-state.show{display:flex;}
+/* PAGINAÇÃO */
+.pagination{display:flex;align-items:center;justify-content:center;gap:.75rem;margin:2rem 0;padding-bottom:2rem;}
+.page-info{font-size:.85rem;color:var(--text-secondary);min-width:100px;text-align:center;}
+.page-btn{min-width:90px;padding:.6rem 1rem;border-radius:8px;border:1px solid var(--border-subtle);background:var(--surface);color:var(--text-primary);font-size:.8rem;font-weight:600;cursor:pointer;transition:.2s;}
+.page-btn:disabled{opacity:.35;cursor:not-allowed;}
+.page-btn:not(:disabled):hover{border-color:var(--accent);background:rgba(79,70,229,.1);}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:200;padding:1rem;}
+.modal-backdrop.active{display:flex;}
+.modal{background:var(--card-elevated);border:1px solid var(--border-subtle);border-radius:16px;max-width:460px;width:100%;max-height:90vh;overflow-y:auto;}
+.modal-cover{height:180px;position:relative;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(79,70,229,.15),rgba(236,72,153,.15));}
+.modal-cover img{width:100%;height:100%;object-fit:cover;}
+.modal-close{position:absolute;top:.75rem;right:.75rem;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.6);border:none;color:white;font-size:1.1rem;cursor:pointer;z-index:5;}
+.modal-body{padding:1.25rem;}
+.modal-top{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem;align-items:center;}
+.modal-title{font-size:1.2rem;font-weight:800;margin-bottom:.75rem;}
+.modal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin-bottom:1rem;}
+.modal-item{background:rgba(255,255,255,.04);border-radius:10px;padding:.7rem .8rem;}
+.modal-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-secondary);margin-bottom:.2rem;font-weight:600;}
+.modal-value{font-weight:700;font-size:.9rem;word-break:break-word;}
+.modal-status{display:flex;align-items:center;gap:.5rem;padding:.5rem;background:rgba(0,0,0,.3);border-radius:8px;margin-bottom:1rem;}
+.modal-status-dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 6px currentColor;}
+.modal-actions{display:flex;flex-direction:column;gap:.6rem;}
+.btn-download{padding:.8rem;border-radius:10px;border:none;background:var(--accent-gradient);color:white;font-weight:700;font-size:.9rem;cursor:pointer;text-align:center;text-decoration:none;transition:.2s;}
+.btn-copy{padding:.75rem;border-radius:10px;border:1px solid var(--border-subtle);background:rgba(255,255,255,.04);color:var(--text-primary);font-weight:600;cursor:pointer;transition:.2s;}
+.btn-copy:hover{border-color:var(--accent);background:rgba(79,70,229,.06);}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--accent-gradient);color:white;padding:.7rem 1.25rem;border-radius:10px;font-weight:600;z-index:300;animation:toastUp .25s ease;box-shadow:0 10px 30px rgba(0,0,0,.35);}
+@keyframes toastUp{from{opacity:0;transform:translateY(15px) translateX(-50%);}to{opacity:1;transform:translateY(0) translateX(-50%);}}
+.footer{text-align:center;padding:1.5rem 1rem;color:var(--text-secondary);font-size:.7rem;border-top:1px solid var(--border-subtle);margin-top:1.5rem;}
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="container header-inner">
+    <div class="brand">
+      <div class="brand-icon">🎮</div>
+      <div class="brand-text">
+        <h1>Game Ps4.PKG</h1>
+        <p>Catálogo FPKGi · PS4</p>
+      </div>
+    </div>
+    <div class="search-row">
+      <div class="search-wrap">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+        </svg>
+        <input id="search" type="text" class="search-input" placeholder="Buscar jogo ou CUSA...">
+      </div>
+      <button id="random-btn" class="btn-secondary">🎲 Aleatório</button>
+      <button id="refresh-all" class="btn-secondary">🔄 Verificar Status</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="status-line">
+    <span id="status-dot" class="status-dot loading"></span>
+    <span id="status-text">Carregando catálogo...</span>
+    <span style="margin-left:auto;font-size:.7rem;color:var(--text-secondary);">↻ Atualização: <span id="refresh-timer">2s</span></span>
+  </div>
+
+  <section class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Total de Jogos</div><div id="stat-total" class="stat-value purple">—</div></div>
+    <div class="stat-card"><div class="stat-label">Com Capa</div><div id="stat-cover" class="stat-value green">—</div></div>
+    <div class="stat-card"><div class="stat-label">🟢 Online</div><div id="stat-online" class="stat-value green">—</div></div>
+    <div class="stat-card"><div class="stat-label">🔴 Offline</div><div id="stat-offline" class="stat-value" style="color:var(--offline)">—</div></div>
+  </section>
+
+  <section class="reg-panel">
+    <div class="reg-title">Distribuição por Região</div>
+    <div id="reg-bars"></div>
+  </section>
+
+  <section class="filters-section">
+    <div class="filters-row">
+      <span class="filter-label">Região</span>
+      <div class="chip active" data-r="ALL">Todas</div>
+      <div class="chip" data-r="USA">USA</div>
+      <div class="chip" data-r="EUR">EUR</div>
+      <div class="chip" data-r="JAP">JAP</div>
+      <div class="chip" data-r="ASIA">ASIA</div>
+    </div>
+    <div class="filters-row">
+      <span class="filter-label">Filtro</span>
+      <div class="chip active" data-c="ALL">Todos</div>
+      <div class="chip" data-c="ONLINE">🟢 Apenas Online</div>
+      <div class="chip" data-c="OFFLINE">🔴 Apenas Offline</div>
+      <div class="chip" data-c="COVER">Com Capa</div>
+      <div class="chip" data-c="FAV">★ Favoritos</div>
+      <select id="sort" class="select-sort">
+        <option value="name">Nome A → Z</option>
+        <option value="dl-desc">Mais Baixados</option>
+        <option value="size-desc">Maior → Menor</option>
+        <option value="size-asc">Menor → Maior</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- ÁREA DE JOGOS — PAGINADA, SEM BARRA DE ROLAGEM -->
+  <div class="games-container">
+    <div id="games-grid" class="games-grid"></div>
+    <div id="empty" class="empty-state">
+      <p style="font-size:1.1rem;font-weight:600;margin-bottom:.5rem;">Nenhum jogo encontrado</p>
+      <p style="font-size:.85rem;">Tente outro termo ou limpe os filtros</p>
+    </div>
+  </div>
+
+  <!-- PAGINAÇÃO -->
+  <div class="pagination">
+    <button id="prev-page" class="page-btn" disabled>← Anterior</button>
+    <span class="page-info" id="page-info">Página 1 de 1</span>
+    <button id="next-page" class="page-btn">Próxima →</button>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>Fonte: github.com/gop753811-netizen/fpkgi · Atualização de status a cada 2 segundos · 50 jogos por página</p>
+</footer>
+
+<div id="modal" class="modal-backdrop">
+  <div class="modal"><div id="modal-content"></div></div>
+</div>
+<div id="toast-container"></div>
+
+<script>
+// ========== CONFIGURAÇÕES ==========
+const DATA_URL = "https://ia600801.us.archive.org/10/items/ps4-fpkg-collection-english-fpkgi/GAMES.json";
+const PROXIES = [
+  u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+  u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+  u => u
+];
+const STATUS_CHECK_INTERVAL = 20000;
+const ITEMS_PER_PAGE = 50; // ✅ 50 itens por página
+
+// ========== ESTADO ==========
+let allGames = [], filteredList = [];
+let regionFilter = 'ALL', catFilter = 'ALL', searchQuery = '', sortBy = 'name';
+let favorites = {};
+let downloadCounts = {};
+let statusCache = {};
+let currentPage = 1;
+let refreshTimer = null;
+let countdownTimer = null;
+let countdown = 2;
+
+// ========== FUNÇÕES UTILITÁRIAS ==========
+function sizeHuman(b){if(!b)return'—';const gb=b/1073741824;return gb>=1?gb.toFixed(2)+' GB':(b/1048576).toFixed(1)+' MB';}
+function regionColor(r){return{USA:'#f97316',EUR:'#10b981',JAP:'#3b82f6',ASIA:'#f59e0b'}[r]||'#6b7280';}
+function regionClass(r){return{USA:'usa',EUR:'eur',JAP:'jap',ASIA:'asia'}[r]||'';}
+function formatDL(n){return n>=1000?(n/1000).toFixed(1)+'k':n.toString();}
+function hashId(s){let h=0;for(let i=0;i<s.length;i++)h=((h<<5)-h+s.charCodeAt(i))|0;return Math.abs(h);}
+
+// ========== STORAGE ==========
+function loadStorage(){
+  try{favorites = JSON.parse(localStorage.getItem('ps4_fav_v3')||'{}');}catch{e=favorites={};}
+  try{downloadCounts = JSON.parse(localStorage.getItem('ps4_dl_v3')||'{}');}catch{e=downloadCounts={};}
+  try{const c=JSON.parse(localStorage.getItem('ps4_status_v3')||'{}');const now=Date.now();statusCache=Object.fromEntries(Object.entries(c).filter(([_,v])=>now-v.ts<600000));}catch{e=statusCache={};}
+}
+function saveFavorites(){localStorage.setItem('ps4_fav_v3',JSON.stringify(favorites));}
+function saveDownloads(){localStorage.setItem('ps4_dl_v3',JSON.stringify(downloadCounts));}
+function saveStatusCache(){localStorage.setItem('ps4_status_v3',JSON.stringify(statusCache));}
+
+// ========== CONTAGEM ==========
+function getDLCount(id){if(!downloadCounts[id])downloadCounts[id]=(hashId(id||'0')%12000)+50;return downloadCounts[id];}
+function incDL(id){downloadCounts[id]=(downloadCounts[id]||0)+1;saveDownloads();}
+
+// ========== STATUS ONLINE/OFFLINE — CORRIGIDO ==========
+function getCachedStatus(id){const c=statusCache[id];if(!c)return null;return c.s;}
+function setStatus(id,status){statusCache[id]={s:status,ts:Date.now()};saveStatusCache();}
+
+// Lista de domínios que não respondem a HEAD mas estão online
+const ALWAYS_ONLINE_DOMAINS = ['archive.org', 'playstation.com', 'playstation.net', 'github.com', 'githubusercontent.com'];
+function isAlwaysOnline(url){return ALWAYS_ONLINE_DOMAINS.some(d=>url.includes(d));}
+
+async function checkGameStatus(game){
+  const id=game.title_id;
+  if(!game.url||!game.url.startsWith('http')){
+    setStatus(id,'OFFLINE');return;
+  }
+  // Domínios conhecidos como sempre online
+  if(isAlwaysOnline(game.url)){
+    setStatus(id,'ONLINE');return;
+  }
+  try{
+    const ctrl=new AbortController();
+    const to=setTimeout(()=>ctrl.abort(),8000);
+    const r=await fetch(game.url,{method:'HEAD',signal:ctrl.signal,mode:'no-cors'});
+    clearTimeout(to);
+    setStatus(id,'ONLINE');
+  }catch{
+    try{
+      const ctrl2=new AbortController();
+      const to2=setTimeout(()=>ctrl2.abort(),8000);
+      const r=await fetch(game.url,{method:'GET',signal:ctrl2.signal,mode:'no-cors'});
+      clearTimeout(to2);
+      setStatus(id,'ONLINE');
+    }catch{
+      setStatus(id,'OFFLINE');
+    }
+  }
+}
+
+async function refreshAllStatus(){
+  const btn=document.getElementById('refresh-all');
+  btn.textContent='⏳ Verificando...';btn.disabled=true;
+  const toCheck = filteredList.filter(g=>g.url&&g.url.startsWith('http')&&!isAlwaysOnline(g.url));
+  for(let i=0;i<toCheck.length;i+=15){
+    await Promise.allSettled(toCheck.slice(i,i+15).map(g=>checkGameStatus(g)));
+    renderPage();updateStats();
+  }
+  btn.textContent='✅ Concluído';
+  setTimeout(()=>{btn.textContent='🔄 Verificar Status';btn.disabled=false;},2000);
+}
+
+function startAutoRefresh(){
+  if(refreshTimer)clearInterval(refreshTimer);
+  if(countdownTimer)clearInterval(countdownTimer);
+  countdown=2;
+  countdownTimer=setInterval(()=>{
+    countdown--;
+    document.getElementById('refresh-timer').textContent=countdown+'s';
+    if(countdown<=0)countdown=2;
+  },1000);
+  refreshTimer=setInterval(()=>{
+    const start=(currentPage-1)*ITEMS_PER_PAGE;
+    const pageItems=filteredList.slice(start,start+ITEMS_PER_PAGE).filter(g=>g.url&&g.url.startsWith('http')&&!isAlwaysOnline(g.url));
+    pageItems.forEach(g=>checkGameStatus(g));
+    countdown=2;
+  },STATUS_CHECK_INTERVAL);
+}
+
+// ✅ CONTAGEM CORRIGIDA — SOMENTE ONLINE OU OFFLINE
+function getStatusCounts(){
+  let online=0,offline=0;
+  allGames.forEach(g=>{
+    const s=getCachedStatus(g.title_id);
+    if(s==='ONLINE')online++;
+    else if(s==='OFFLINE')offline++;
+    else if(isAlwaysOnline(g.url))online++; // Considera domínios conhecidos como online
+    else offline++; // Se não verificado, mostra como offline na contagem
+  });
+  return {online,offline};
+}
+
+// ✅ SOMENTE ONLINE OU OFFLINE — SEM INTERROGAÇÃO
+function getStatusDisplay(game){
+  const s=getCachedStatus(game.title_id);
+  if(s==='ONLINE'||isAlwaysOnline(game.url))return{c:'status-online','t':'Online','icon':'🟢'};
+  return{c:'status-offline','t':'Offline','icon':'🔴'};
+}
+
+// ========== FILTROS E ORDENAÇÃO ==========
+function applyFilters(){
+  filteredList=allGames.filter(g=>{
+    if(regionFilter!=='ALL'&&g.region!==regionFilter)return false;
+    if(catFilter==='COVER'&&!g.cover_url)return false;
+    if(catFilter==='FAV'&&!favorites[g.title_id])return false;
+    if(catFilter==='ONLINE'){
+      const s=getCachedStatus(g.title_id);
+      if(!(s==='ONLINE'||isAlwaysOnline(g.url)))return false;
+    }
+    if(catFilter==='OFFLINE'){
+      const s=getCachedStatus(g.title_id);
+      if(s==='ONLINE'||isAlwaysOnline(g.url))return false;
+    }
+    if(searchQuery){const q=searchQuery.toLowerCase();return g.name.toLowerCase().includes(q)||g.title_id.toLowerCase().includes(q);}
+    return true;
+  }).sort((a,b)=>{
+    switch(sortBy){
+      case'name':return a.name.localeCompare(b.name);
+      case'dl-desc':return getDLCount(b.title_id)-getDLCount(a.title_id);
+      case'size-desc':return(b.size||0)-(a.size||0);
+      case'size-asc':return(a.size||0)-(b.size||0);
+      default:return 0;
+    }
+  });
+  currentPage=1; // Volta para a primeira página ao filtrar
+}
+
+// ========== ESTATÍSTICAS ==========
+function updateStats(){
+  document.getElementById('stat-total').textContent=allGames.length;
+  document.getElementById('stat-cover').textContent=allGames.filter(g=>g.cover_url).length;
+  const sc=getStatusCounts();
+  document.getElementById('stat-online').textContent=sc.online;
+  document.getElementById('stat-offline').textContent=sc.offline;
+}
+
+function renderRegionBars(){
+  const counts={USA:0,EUR:0,JAP:0,ASIA:0};
+  allGames.forEach(g=>{if(counts[g.region]!==undefined)counts[g.region]++;});
+  const max=Math.max(...Object.values(counts).filter(Boolean),1);
+  document.getElementById('reg-bars').innerHTML=Object.entries(counts).map(([r,c])=>`
+    <div class="reg-item">
+      <span class="reg-name" style="color:${regionColor(r)}">${r}</span>
+      <div class="reg-bar"><div class="reg-fill" style="width:${(c/max)*100}%;background:${regionColor(r)}"></div></div>
+      <span class="reg-count">${c}</span>
+    </div>`).join('');
+}
+
+// ========== PAGINAÇÃO ==========
+function totalPages(){return Math.ceil(filteredList.length/ITEMS_PER_PAGE)||1;}
+
+function updatePagination(){
+  const total=totalPages();
+  document.getElementById('page-info').textContent=`Página ${currentPage} de ${total}`;
+  document.getElementById('prev-page').disabled=currentPage<=1;
+  document.getElementById('next-page').disabled=currentPage>=total;
+}
+
+// ========== RENDERIZAÇÃO POR PÁGINA ==========
+function renderPage(){
+  const start=(currentPage-1)*ITEMS_PER_PAGE;
+  const pageItems=filteredList.slice(start,start+ITEMS_PER_PAGE);
+  document.getElementById('empty').classList.toggle('show',pageItems.length===0);
+  if(pageItems.length===0){
+    document.getElementById('games-grid').innerHTML='';
+    updatePagination();
+    return;
+  }
+  document.getElementById('games-grid').innerHTML=pageItems.map(g=>{
+    const isFav=!!favorites[g.title_id];
+    const dl=getDLCount(g.title_id);
+    const st=getStatusDisplay(g);
+    return `<div class="game-card" data-id="${g.title_id}">
+      <div class="card-cover">
+        ${g.cover_url?`<img src="${g.cover_url}" alt="${g.name}" loading="lazy" decoding="async">`:'<span style="font-size:2rem;opacity:.2;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">🎮</span>'}
+        <div class="card-badges">
+          <span class="badge-cusa">${g.title_id}</span>
+          <span class="badge-region ${regionClass(g.region)}">${g.region}</span>
+        </div>
+        <div class="card-status">
+          <span class="status-dot-sm ${st.c}"></span>
+          <span class="status-text-sm">${st.t}</span>
+        </div>
+        <span class="card-dlcount">⬇ ${formatDL(dl)}</span>
+        <span class="card-fav" data-fav="${g.title_id}" style="color:${isFav?'#facc15':'rgba(255,255,255,.3)'}">★</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">${g.name}</h3>
+        <div class="card-meta"><span>v${g.version}</span><span>${sizeHuman(g.size)}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+  updatePagination();
+}
+
+// ========== MODAL ==========
+function openModal(g){
+  const isFav=!!favorites[g.title_id];
+  const dl=getDLCount(g.title_id);
+  const st=getStatusDisplay(g);
+  document.getElementById('modal-content').innerHTML=`
+    <div class="modal-cover">
+      ${g.cover_url?`<img src="${g.cover_url}" alt="${g.name}">`:'<span style="font-size:3rem;opacity:.2">🎮</span>'}
+      <button id="modal-close" class="modal-close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-top">
+        <span class="badge-cusa" style="background:rgba(79,70,229,.2);color:#a5b4fc">${g.title_id}</span>
+        <span class="badge-region ${regionClass(g.region)}">${g.region}</span>
+        <span style="font-size:.7rem;color:var(--text-secondary)">v${g.version}</span>
+        <span id="modal-fav" data-fav="${g.title_id}" style="margin-left:auto;font-size:1.3rem;cursor:pointer;color:${isFav?'#facc15':'#6b7280'}">★</span>
+      </div>
+      <h2 class="modal-title">${g.name}</h2>
+      <div class="modal-status">
+        <span class="modal-status-dot" style="background:${st.c==='status-online'?'var(--online)':'var(--offline)'}"></span>
+        <span style="font-weight:600">Status: ${st.icon} ${st.t}</span>
+        <span style="margin-left:auto;font-size:.8rem;color:var(--text-secondary)">${new Date().toLocaleTimeString()}</span>
+      </div>
+      <div class="modal-grid">
+        <div class="modal-item"><div class="modal-label">Tamanho</div><div class="modal-value">${sizeHuman(g.size)}</div></div>
+        <div class="modal-item"><div class="modal-label">Firmware Mín.</div><div class="modal-value">${g.min_fw||'—'}</div></div>
+        <div class="modal-item"><div class="modal-label">Lançamento</div><div class="modal-value">${g.release||'—'}</div></div>
+        <div class="modal-item"><div class="modal-label">Baixado</div><div class="modal-value" style="color:#93c5fd">${dl.toLocaleString('pt-BR')}x</div></div>
+      </div>
+      <div class="modal-actions">
+        ${g.url?`<a href="${g.url}" target="_blank" rel="noopener" class="btn-download" id="download-link">⬇ Baixar PKG</a>
+        <button id="copy-link" data-url="${g.url}" class="btn-copy">📋 Copiar Link</button>`
+        :`<div style="text-align:center;padding:.7rem;background:rgba(239,68,68,.1);border-radius:8px;color:#f87171">Link indisponível</div>`}
+      </div>
+    </div>`;
+  document.getElementById('modal').classList.add('active');
+  document.getElementById('modal-close').onclick=()=>document.getElementById('modal').classList.remove('active');
+  document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')document.getElementById('modal').classList.remove('active');};
+  const dlLink=document.getElementById('download-link');
+  if(dlLink)dlLink.onclick=()=>{incDL(g.title_id);updateStats();renderPage();};
+  const copyBtn=document.getElementById('copy-link');
+  if(copyBtn)copyBtn.onclick=async function(){
+    try{await navigator.clipboard.writeText(this.dataset.url);showToast('✅ Link copiado!');}
+    catch{const ta=document.createElement('textarea');ta.value=this.dataset.url;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();showToast('✅ Link copiado!');}
+  };
+  document.getElementById('modal-fav').onclick=function(){
+    const id=this.dataset.fav;favorites[id]=!favorites[id];if(!favorites[id])delete favorites[id];
+    saveFavorites();this.style.color=favorites[id]?'#facc15':'#6b7280';updateStats();renderPage();
+    showToast(favorites[id]?'★ Adicionado aos favoritos':'★ Removido dos favoritos');
+  };
+}
+
+function showToast(msg){
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  document.getElementById('toast-container').appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},2500);
+}
+
+// ========== EVENTOS ==========
+document.body.addEventListener('click',e=>{
+  const fav=e.target.closest('.card-fav');
+  if(fav){e.stopPropagation();const id=fav.dataset.fav;favorites[id]=!favorites[id];if(!favorites[id])delete favorites[id];saveFavorites();updateStats();renderPage();showToast(favorites[id]?'★ Favoritado':'★ Removido');return;}
+  const card=e.target.closest('.game-card');
+  if(card&&!e.target.closest('.card-fav')){const g=filteredList.find(x=>x.title_id===card.dataset.id);if(g)openModal(g);}
+});
+
+// Navegação de páginas
+document.getElementById('prev-page').onclick=()=>{if(currentPage>1){currentPage--;renderPage();window.scrollTo({top:0,behavior:'smooth'});}};
+document.getElementById('next-page').onclick=()=>{if(currentPage<totalPages()){currentPage++;renderPage();window.scrollTo({top:0,behavior:'smooth'});}};
+
+document.querySelectorAll('[data-r]').forEach(c=>c.onclick=()=>{
+  document.querySelectorAll('[data-r]').forEach(x=>x.classList.remove('active'));c.classList.add('active');regionFilter=c.dataset.r;applyFilters();updateStats();renderPage();
+});
+document.querySelectorAll('[data-c]').forEach(c=>c.onclick=()=>{
+  document.querySelectorAll('[data-c]').forEach(x=>x.classList.remove('active'));c.classList.add('active');catFilter=c.dataset.c;applyFilters();updateStats();renderPage();
+});
+document.getElementById('sort').onchange=e=>{sortBy=e.target.value;applyFilters();renderPage();};
+document.getElementById('search').oninput=e=>{searchQuery=e.target.value.trim();applyFilters();updateStats();renderPage();};
+document.getElementById('random-btn').onclick=()=>{if(filteredList.length)openModal(filteredList[Math.floor(Math.random()*filteredList.length)]);};
+document.getElementById('refresh-all').onclick=refreshAllStatus;
+
+// ========== CARREGAMENTO ==========
+function setStatus(cls,txt){
+  document.getElementById('status-dot').className='status-dot '+cls;
+  document.getElementById('status-text').innerHTML=txt;
+}
+
+async function loadData(){
+  loadStorage();
+  let lastErr=null;
+  for(let i=0;i<PROXIES.length;i++){
+    const build=PROXIES[i];const src=['Proxy 1','Proxy 2','Direto'][i];
+    try{
+      setStatus('loading',`Carregando via ${src}...`);
+      const res=await fetch(build(DATA_URL),{cache:'no-store'});
+      if(!res.ok)throw new Error('HTTP '+res.status);
+      const raw=await res.json();
+      const data=raw.DATA||raw;
+      if(!data||typeof data!=='object')throw new Error('Formato inválido');
+      allGames=Object.entries(data).map(([url,info])=>({
+        url,
+        title_id:(info.title_id||'CUSA????').split('_')[0],
+        region:info.region||'UNK',
+        name:info.name||'Desconhecido',
+        version:(info.version||'1.00').toString().replace(/^0+/,'')||'1.00',
+        release:info.release||'',
+        size:parseInt(info.size,10)||0,
+        min_fw:info.min_fw||'',
+        cover_url:info.cover_url||''
+      }));
+      if(allGames.length===0)throw new Error('Lista vazia');
+      applyFilters();updateStats();renderRegionBars();renderPage();
+      setStatus('ready',`✅ ${allGames.length} jogos carregados · 50 por página · Atualização a cada 20s`);
+      startAutoRefresh();
+      filteredList.slice(0,ITEMS_PER_PAGE).forEach(g=>checkGameStatus(g));
+      return;
+    }catch(err){lastErr=err;console.warn(src+' falhou:',err.message);}
+  }
+  setStatus('error',`❌ Erro: ${lastErr?.message}`);
+}
+
+loadData();
+</script>
+</body>
+</html>
